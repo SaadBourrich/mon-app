@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[97367,["/mon-app/_next/static/chunks/0dbhjjzl8qfwv.js"],"OutletBoundary"]
+3:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","main",null,{"style":{"padding":"2rem","fontFamily":"sans-serif"},"children":[["$","h1",null,{"children":"Hello World"}],["$","p",null,{"children":"Notre équipe : Saad Bourrich"}],["$","p",null,{"children":"Pipeline as Code — Docker · Jenkins · GitHub Pages"}]]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"YpMWzlRhrzhTGHlAKOr3t"}
+4:null
