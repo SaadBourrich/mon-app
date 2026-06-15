@@ -16,17 +16,18 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'docker build -t mon-app:latest .'
-            }
-        }
-        stage('Install') {
-            steps {
-                sh 'docker run --rm -v "${WORKSPACE}:/app" -w /app mon-app:latest npm ci'
+                sh 'docker build -t mon-app:latest --build-arg NEXT_PUBLIC_BASE_PATH=/${APP_NAME} .'
             }
         }
         stage('Export HTML Static') {
             steps {
-                sh 'docker run --rm -v "${WORKSPACE}:/app" -w /app -e NEXT_PUBLIC_BASE_PATH=/${APP_NAME} mon-app:latest npm run build'
+                sh '''
+                    docker create --name export_tmp mon-app:latest npm run build
+                    docker start -a export_tmp
+                    rm -rf out
+                    docker cp export_tmp:/app/out ./out
+                    docker rm export_tmp
+                '''
             }
         }
         stage('Deploy GitHub Pages') {
