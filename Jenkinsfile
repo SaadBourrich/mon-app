@@ -2,11 +2,11 @@
     agent any
     triggers { githubPush() }
     environment {
-        GITHUB_REPO = 'git@github.com:SaadBourrich/mon-app.git'
-        APP_NAME = 'mon-app'
-        GITHUB_USER = 'Jenkins CI'
+        GITHUB_REPO  = 'git@github.com:SaadBourrich/mon-app.git'
+        APP_NAME     = 'mon-app'
+        GITHUB_USER  = 'Jenkins CI'
         GITHUB_EMAIL = 'jenkins@ci.local'
-        SSH_CRED_ID = 'github-ssh-key'
+        SSH_CRED_ID  = 'github-ssh-key'
     }
     stages {
         stage('Checkout') {
@@ -21,12 +21,12 @@
         }
         stage('Install') {
             steps {
-                sh 'docker run --rm -v \C:\Users\Saadb\Desktop\mon-app:/app -w /app mon-app:latest npm ci'
+                sh 'docker run --rm -v "${WORKSPACE}:/app" -w /app mon-app:latest npm ci'
             }
         }
         stage('Export HTML Static') {
             steps {
-                sh 'docker run --rm -v \C:\Users\Saadb\Desktop\mon-app:/app -w /app -e NEXT_PUBLIC_BASE_PATH=/\ mon-app:latest npm run build'
+                sh 'docker run --rm -v "${WORKSPACE}:/app" -w /app -e NEXT_PUBLIC_BASE_PATH=/${APP_NAME} mon-app:latest npm run build'
             }
         }
         stage('Deploy GitHub Pages') {
@@ -36,11 +36,12 @@
                         cd out
                         touch .nojekyll
                         git init
-                        git config user.email "\"
-                        git config user.name "\"
+                        git checkout -b gh-pages
+                        git config user.email "${GITHUB_EMAIL}"
+                        git config user.name "${GITHUB_USER}"
                         git add .
-                        git commit -m "deploy: \05/30/2026 17:49:00"
-                        git push -f \ HEAD:gh-pages
+                        git commit -m "deploy: $(date)"
+                        git push -f ${GITHUB_REPO} HEAD:gh-pages
                     '''
                 }
             }
